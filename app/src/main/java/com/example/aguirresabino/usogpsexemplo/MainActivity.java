@@ -32,15 +32,27 @@ public class MainActivity extends AppCompatActivity {
         estado = findViewById(R.id.estado);
         pais = findViewById(R.id.pais);
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         //Verificação de permissão que deve ser usada a partir da api 23
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        /*if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             //nao implementado
         }else {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
 
-        try {
+        }*/
+
+        /*try {
             Address endereco = this.buscarEndereco(location.getLatitude(), location.getLongitude());
             cidade.setText("Cidade: " + endereco.getLocality());
             estado.setText("Estado: " + endereco.getAdminArea());
@@ -48,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         latitude.setText("Latitude: " + location.getLatitude());
         longitude.setText("Longitude: " + location.getLongitude());
@@ -64,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
         if(addresses.size() > 0){
-            address = addresses.get(0);
+            address = addresses.get(1);
         }
 
         return address;
